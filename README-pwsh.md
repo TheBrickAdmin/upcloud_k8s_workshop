@@ -55,12 +55,13 @@ Ensure you are at the root of the `upcloud_k8s_workshop` directory.
 
 ## Step 1: Add participants
 
-Edit `scripts/participants.txt` — one name per line, `#` for comments:
+Copy the example file and edit it — one name per line, `#` for comments:
 
+```powershell
+Copy-Item scripts/participants.txt.example scripts/participants.txt
 ```
-alice
-bob
-```
+
+Then open `scripts/participants.txt` and replace the example names with your actual participants.
 
 ---
 

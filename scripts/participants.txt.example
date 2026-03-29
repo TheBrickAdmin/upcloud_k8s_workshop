@@ -1,0 +1,12 @@
+# One participant name per line.
+# Lines starting with # and blank lines are ignored.
+# Names are lowercased and sanitised (spaces/special chars become dashes).
+#
+# Copy this file to participants.txt and fill in your participant names:
+#
+#   cp scripts/participants.txt.example scripts/participants.txt   # bash
+#   Copy-Item scripts/participants.txt.example scripts/participants.txt  # pwsh
+#
+alice
+bob
+charlie
