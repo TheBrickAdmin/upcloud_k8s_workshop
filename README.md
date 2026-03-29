@@ -14,7 +14,7 @@ Participants receive:
 ## Workspace layout
 
 ```
-UpCloud/
+upcloud_k8s_workshop/
 ├── admin/
 │   └── <cluster-name>_kubeconfig.yaml   # Admin kubeconfig — gitignored, download from UpCloud after apply
 ├── deploy/
@@ -42,7 +42,7 @@ UpCloud/
 
 ## Step 0: Ensure location
 
-Ensure you are at the root of the UPCLOUD directory.
+Ensure you are at the root of the `upcloud_k8s_workshop` directory.
 
 ---
 
