@@ -1,0 +1,2 @@
+control_plane_ip_filter = ["your.public.ip.here"]
+ssh_keys                = ["ssh-rsa AAAA... your-key-comment"]
