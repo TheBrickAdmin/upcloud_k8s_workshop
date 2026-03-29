@@ -1,4 +1,0 @@
-# One participant name per line.
-# Lines starting with # and blank lines are ignored.
-rein
-henk
