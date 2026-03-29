@@ -198,7 +198,7 @@ if ($SkipScale) {
   }
 
   Write-Host "Running terraform apply to set node_count=$requiredNodes ..."
-  & terraform -chdir $tfDir apply -var "node_count=$requiredNodes" -auto-approve
+  & terraform "-chdir=$tfDir" apply -var "node_count=$requiredNodes" -auto-approve
   if ($LASTEXITCODE -ne 0) {
     throw "Terraform apply failed while scaling to $requiredNodes nodes."
   }

@@ -97,7 +97,7 @@ else
   fi
 
   echo "Running terraform apply to set node_count=$required_nodes ..."
-  terraform -chdir "$tf_dir" apply -var "node_count=$required_nodes" -auto-approve
+  terraform -chdir="$tf_dir" apply -var "node_count=$required_nodes" -auto-approve
 
   echo "Waiting for all nodes to be Ready (timeout 10m)..."
   if ! kubectl --kubeconfig "$admin_kubeconfig" wait node --all --for=condition=Ready --timeout=10m; then
