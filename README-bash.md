@@ -51,6 +51,12 @@ upcloud_k8s_workshop/
 
 Ensure you are at the root of the `upcloud_k8s_workshop` directory.
 
+If this is a fresh clone, make the scripts executable first:
+
+```bash
+chmod +x scripts/*.sh
+```
+
 ---
 
 ## Step 1: Add participants
