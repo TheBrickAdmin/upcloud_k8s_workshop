@@ -1,11 +1,13 @@
 param(
-  [string]$ParticipantsFile    = (Join-Path $PSScriptRoot "participants.txt"),
-  [string]$AdminKubeconfigPath = (Join-Path $PSScriptRoot "../admin/workshop-kub_kubeconfig.yaml"),
-  [string]$ParticipantsDir     = (Join-Path $PSScriptRoot "../participants"),
+  [string]$ParticipantsFile      = (Join-Path $PSScriptRoot "participants.txt"),
+  [string]$AdminKubeconfigPath   = (Join-Path $PSScriptRoot "../admin/workshop-kub_kubeconfig.yaml"),
+  [string]$ParticipantsDir       = (Join-Path $PSScriptRoot "../participants"),
   [string[]]$Names,
-  [int]$TokenDurationHours     = 24,
-  [string]$LoadBalancerIP      = "",
-  [string]$LoadBalancerNamespace = "ingress-nginx"
+  [int]$TokenDurationHours       = 24,
+  [string]$LoadBalancerIP        = "",
+  [string]$LoadBalancerNamespace = "ingress-nginx",
+  [string]$TerraformDir          = (Join-Path $PSScriptRoot "../terraform"),
+  [switch]$SkipScale
 )
 
 Set-StrictMode -Version Latest
@@ -175,6 +177,37 @@ foreach ($participant in $participantNames) {
 $normalized = $normalized | Sort-Object -Unique
 if ($normalized.Count -eq 0) {
   throw "No valid participant names were found."
+}
+
+# Scale cluster nodes to match participant count.
+# Formula: 1 node per participant, minimum 2.
+# This gives each participant a full node's worth of headroom for experimentation.
+if ($SkipScale) {
+  Write-Host "Skipping cluster scaling (-SkipScale specified)."
+} else {
+  $requiredNodes = [Math]::Max(2, $normalized.Count)
+  Write-Host "Participants: $($normalized.Count) — target node count: $requiredNodes"
+
+  $tfDir = Resolve-Path $TerraformDir
+  if (-not (Test-Path -LiteralPath (Join-Path $tfDir ".terraform"))) {
+    throw "Terraform is not initialised in '$tfDir'. Run 'terraform init' first."
+  }
+
+  if (-not (Get-Command terraform -ErrorAction SilentlyContinue)) {
+    throw "terraform is not installed or not in PATH."
+  }
+
+  Write-Host "Running terraform apply to set node_count=$requiredNodes ..."
+  & terraform -chdir $tfDir apply -var "node_count=$requiredNodes" -auto-approve
+  if ($LASTEXITCODE -ne 0) {
+    throw "Terraform apply failed while scaling to $requiredNodes nodes."
+  }
+
+  Write-Host "Waiting for all nodes to be Ready (timeout 10m)..."
+  & kubectl --kubeconfig $AdminKubeconfigPath wait node --all --for=condition=Ready --timeout=10m
+  if ($LASTEXITCODE -ne 0) {
+    Write-Host "Warning: Not all nodes became Ready within the timeout. Proceeding anyway."
+  }
 }
 
 $clusterName = (& kubectl --kubeconfig $AdminKubeconfigPath config view --raw -o jsonpath='{.clusters[0].name}')

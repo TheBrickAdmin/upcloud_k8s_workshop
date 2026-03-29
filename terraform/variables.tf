@@ -32,7 +32,7 @@ variable "control_plane_ip_filter" {
 }
 
 variable "node_count" {
-  description = "Number of worker nodes in the default node group."
+  description = "Number of worker nodes in the default node group. provision-workshop-access.ps1 sets this automatically (1 node per participant, minimum 2)."
   type        = number
   default     = 2
 }

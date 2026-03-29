@@ -133,10 +133,21 @@ participants need to add to their hosts file.
 
 ## Step 4: Provision participant access
 
-Creates namespaces, RBAC, and kubeconfigs for all participants in `scripts/participants.txt`:
+Creates namespaces, RBAC, and kubeconfigs for all participants in `scripts/participants.txt`.
+Also scales the cluster node count to match the participant list before provisioning:
 
 ```powershell
 ./scripts/provision-workshop-access.ps1
+```
+
+**Node scaling:** The script sets `node_count` to `max(2, number_of_participants)` via
+`terraform apply` — one node per participant so everyone has headroom to experiment beyond
+just the voting app. Run it again whenever you add or remove participants.
+
+To skip scaling (e.g. cluster is already correctly sized):
+
+```powershell
+./scripts/provision-workshop-access.ps1 -SkipScale
 ```
 
 Each participant gets:
@@ -147,6 +158,9 @@ Each participant gets:
 
 > **Note:** Run this step only after the ingress controller has an external IP (Step 3).
 > If you ran it too early and the READMEs contain a placeholder, re-run this script to update them.
+>
+> **Terraform credentials:** The scaling step requires `UPCLOUD_TOKEN` to be set in your shell
+> (same as Step 2).
 
 ---
 
