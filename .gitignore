@@ -24,6 +24,10 @@ admin/*.yaml
 # and should not be committed — hand files out directly, not via git
 participants/*/*
 
+# ── Participants file ─────────────────────────────────────────────────────────
+
+/scripts/participants.txt
+
 # ── Local tooling ─────────────────────────────────────────────────────────────
 
 .claude/
