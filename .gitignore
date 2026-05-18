@@ -32,3 +32,4 @@ participants/*/*
 # ── Local tooling ─────────────────────────────────────────────────────────────
 
 .claude/
+/terraform/tfplan
