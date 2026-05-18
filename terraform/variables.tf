@@ -16,7 +16,7 @@ variable "cluster_plan" {
 variable "kubernetes_version" {
   description = "Kubernetes version to deploy."
   type        = string
-  default     = "1.34"
+  default     = "1.35"
 }
 
 variable "zone" {
