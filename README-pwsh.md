@@ -85,6 +85,19 @@ Copy the tfvars example and fill in your values:
 Copy-Item terraform/terraform.tfvars.example terraform/terraform.tfvars
 ```
 
+If you need an SSH key for `ssh_keys`, generate one and print the public key:
+
+```powershell
+ssh-keygen -t ed25519 -C "upcloud-workshop" -f "$env:USERPROFILE/.ssh/upcloud_workshop_ed25519"
+Get-Content "$env:USERPROFILE/.ssh/upcloud_workshop_ed25519.pub"
+```
+
+Copy the full `ssh-ed25519 ...` output line into `terraform/terraform.tfvars`:
+
+```hcl
+ssh_keys = ["ssh-ed25519 AAAA... upcloud-workshop"]
+```
+
 Then deploy:
 
 ```powershell
